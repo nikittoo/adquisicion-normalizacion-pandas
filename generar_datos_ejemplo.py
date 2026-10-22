@@ -23,19 +23,21 @@ ids_validos = [101, 102, 103, 104, 105, 106, 107, 108]
 
 transacciones = pd.DataFrame({
     "id_transaccion": range(1, n + 1),
-    "id_producto": np.random.choice(ids_validos, size=n),
+    "id_producto": np.random.choice(ids_validos, size=n), #recordar que pueden repetirse los productos
     "cantidad": np.random.randint(1, 11, size=n).astype(float),
-    "fecha": pd.to_datetime("2026-01-01") + pd.to_timedelta(np.random.randint(0, 270, size=n), unit="D"),
+    "fecha": pd.to_datetime("2025-01-01") + pd.to_timedelta(np.random.randint(0, 365, size=n), unit="D"), #es para una fecha random entre 2025-01-01 y 2025-12-31
 })
-transacciones["fecha"] = transacciones["fecha"].dt.strftime("%Y-%m-%d")
 
-transacciones.loc[[5, 40, 120], "cantidad"] = np.nan             # cantidad vacía
-transacciones.loc[[15, 77], "fecha"] = np.nan                    # fecha vacía
-transacciones.loc[[60], "fecha"] = "fecha-invalida"              # fecha mal escrita
-transacciones.loc[[90], "id_producto"] = np.nan                  # producto sin ID
-transacciones.loc[[130, 131], "id_producto"] = 999               # producto que no existe en el catálogo
+transacciones["fecha"] = transacciones["fecha"].dt.strftime("%Y-%m-%d") #esto convierte fecha a texto (string)
 
-transacciones.to_csv(os.path.join(DATA_DIR, "transacciones.csv"), index=False)
+#vaciamos algunos valores para simular datos faltantes
+transacciones.loc[[5, 40, 120], "cantidad"] = np.nan
+transacciones.loc[[15, 77], "fecha"] = np.nan
+transacciones.loc[[60], "fecha"] = "fecha-invalida"
+transacciones.loc[[90], "id_producto"] = np.nan
+transacciones.loc[[130, 131], "id_producto"] = 999 # producto que no existe 
+
+transacciones.to_csv(os.path.join(DATA_DIR, "transacciones.csv"), index=False) #creamos el csv
 
 print("Archivos generados en la carpeta data/:")
 print(" - transacciones.csv:", len(transacciones), "filas")
